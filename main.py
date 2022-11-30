@@ -1,19 +1,10 @@
 from trie import *
 from tkinter import *
 from levenshtein import *
+import pickle
 
-# Driver Code
-global keys
-keys = ["hello", "dog", "hell", "cat", "a",
-        "hel", "help", "helps", "helping"]  # keys to form the trie structure.
-
-# creating trie object
-global t
-t = Trie()
-
-# creating the trie structure with the
-# given set of strings.
-t.formTrie(keys)
+trie_file_read = open('fulltrie.obj', 'rb')
+t = pickle.load(trie_file_read)
 
 window = Tk()
 window.geometry("300x200+10+10")
@@ -33,7 +24,7 @@ def get_word(*args):
     labels = [None] * (10)
     for i in range(0, 10):
         labels[i] = Label(window, text="                     ", font=("Arial", 10))
-        labels[i].place(x=80, y=70 + 20 * i)
+        labels[i].place(x=80, y=75 + 20 * i)
 
     palavra = v.get()
     word = palavra
