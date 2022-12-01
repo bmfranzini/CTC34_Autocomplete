@@ -6,6 +6,10 @@ import pickle
 trie_file_read = open('fulltrie.obj', 'rb')
 t = pickle.load(trie_file_read)
 
+#t = Trie()
+#t.formTrie(["b", "hel", "hell", "hello", "help", "a"])
+#print(t.root.children[0].children[0].children[0].children[0].children[0].last)
+
 window = Tk()
 window.geometry("300x200+10+10")
 lbl = Label(window, text="Digite uma palavra", font=("Arial", 16))
@@ -30,7 +34,6 @@ def get_word(*args):
     word = palavra
     sugestions = []
     comp = t.printAutoSuggestions(palavra, sugestions)
-    print(sugestions)
     words_lev = sugestions
 
     matches = []
@@ -56,14 +59,6 @@ def get_word(*args):
         else:
             labels[i].config(text=sugestions[i] + "               ", fg='black')
 
-    print("o vetor matches eh", matches)
-
 
 v.trace('w', get_word)
-#entry.bind('<Return>', get_word)
-
-#e = Entry(root, textvariable=v)
 window.mainloop()
-
-
-# This code is contributed by amurdia and muhammedrijnas
