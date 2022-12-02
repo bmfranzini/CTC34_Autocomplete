@@ -1,21 +1,23 @@
 import fst_lib2 as fst
+import pickle
 
 # defino as variáveis globais
 t = fst.FST()
-
+#fst_file_read = open('fullfst.obj', 'rb')
+#t = pickle.load(fst_file_read)
 def find_minimized(state):
     # retorna um estado equivalente do dicionário. Se não estiver presente, insere uma cópia
     # do parâmetro no dicionário e o retorna
     global t
     for state_index in range(len(t.states)):
         if t.states[state_index].is_equivalent(state):
-            print("Achei equivalente")
+            #print("Achei equivalente")
             return state_index
     new_state = fst.State(fst.NORMAL_STATE)
     new_state.copy_state(state) # acho que não precisa, já está sendo uma cópia
-    print("Novo minimo")
-    for edge in new_state.outgoing_edges:
-        print(f'{edge.dest}  {edge.on_symbol}')
+    #print("Novo minimo")
+    #for edge in new_state.outgoing_edges:
+        #print(f'{edge.dest}  {edge.on_symbol}')
     t.states.append(new_state)
     #t.add_state(state.type, state.outgoing_edges)
 
@@ -43,7 +45,7 @@ def create_FST(input_list, output_list):
         while(j < len(current_word) and j < len(previous_word) and current_word[j] == previous_word[j]):
             j += 1
         prefix_len = j  # número máximo de letras do prefixo comum
-        print(prefix_len)
+        #print(prefix_len)
         # minimizamos os estados do sufixo da última palavra
         for j in range(len(previous_word), prefix_len, -1):
             output = temp_states[j-1].output_to_state(temp_states[j])
@@ -76,9 +78,9 @@ def create_FST(input_list, output_list):
         prefix_output = 0
         for j in range(prefix_len):
             prefix_output += temp_states[j].output(current_word[j])
-            print("PrefixOutput: ",prefix_output)
+            #print("PrefixOutput: ",prefix_output)
         new_output = current_output - prefix_output
-        print('NewOutput', new_output)
+        #print('NewOutput', new_output)
         temp_states[prefix_len].set_output(current_word[prefix_len], new_output)
         
         previous_word = current_word
@@ -91,7 +93,7 @@ def create_FST(input_list, output_list):
         #new_edge = fst.Edge(temp_states[i-1], t.states[find_minimized(temp_states[i])], current_word[i-1])
         temp_states[i].clear_state()
     minimized_state_index3 = find_minimized(temp_states[0])
-    print(t.states[minimized_state_index3].outgoing_edges)
+    #print(t.states[minimized_state_index3].outgoing_edges)
     t.define_initial(t.states[minimized_state_index3])
     
     return t

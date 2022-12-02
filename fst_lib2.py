@@ -74,7 +74,7 @@ class State(object):
     def del_edge(self, state): # revisar para checar tbm transicao
         for edge in self.outgoing_edges:
             if edge.dest == state:
-                print(f"Tirando aresta de char {edge.on_symbol}")
+                #print(f"Tirando aresta de char {edge.on_symbol}")
                 self.outgoing_edges.remove(edge)
     def output_to_state(self, state): # revisar para checar tbm transicao
         for edge in self.outgoing_edges:
