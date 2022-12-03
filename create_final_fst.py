@@ -42,7 +42,7 @@ def create_FST(input_list, output_list):
         current_output = output_list[i]
         j = 0 # checar se é zero ou um
         # calculo tamanho do máximo prefixo comum entre current_word e previous_word
-        while(j < len(current_word) and j < len(previous_word) and current_word[j] == previous_word[j]):
+        while(j < len(current_word) and j < len(previous_word) - 1 and current_word[j] == previous_word[j]):
             j += 1
         prefix_len = j  # número máximo de letras do prefixo comum
         #print(prefix_len)

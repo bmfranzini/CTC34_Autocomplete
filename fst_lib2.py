@@ -143,3 +143,69 @@ class FST(object):
             self.states[self.states.index(self.init_state)].type = NORMAL_STATE
         self.states[self.states.index(state)].type = INTITIAL_STATE
         self.init_state = state
+
+    """def suggestionsRec(self, node, word, sugestions):
+
+        # Method to recursively traverse the trie
+        # and return a whole word.
+        if node.last:
+            sugestions.append(word)
+
+        for char, child in node.children.items():
+            self.suggestionsRec(n, word + a)
+"""
+    def findSuggestions(self, key, dict):
+        node = self.init_state
+        idx_word = 0
+        for a in key:
+            aux = False
+            for children in node.outgoing_edges:
+                if children.on_symbol == a:
+                    aux = True
+                    node = children.dest
+                    idx_word += children.op
+                    break
+
+            if not aux:
+                return
+
+        if not node.outgoing_edges:
+            return -1
+
+        first, last = self.findIndex(node, idx_word)
+        print("sugestoes para a palavra: ", key, " ---- ", first, last)
+        return dict[first:last+1]
+
+    def findIndex(self, node, idx):
+        vertex = node
+        idx_first = idx
+        idx_last = idx
+
+        while vertex.type != FINAL_STATE:
+            ascii_value = 10000
+            edge_idx = -1
+            #print("tipo da aresta: ", type(ord(vertex.outgoing_edges[0].on_symbol)))
+            #print("tipo da aresta: ", type(ord(vertex.outgoing_edges[0].on_symbol)))
+            for i in range(len(vertex.outgoing_edges)):
+                edge = vertex.outgoing_edges[i]
+                if int(ord(edge.on_symbol[0])) < ascii_value:
+                    ascii_value = ord(edge.on_symbol)
+                    edge_idx = i
+            idx_first += vertex.outgoing_edges[edge_idx].op
+            vertex = vertex.outgoing_edges[edge_idx].dest
+
+        vertex = node
+        while vertex.type != FINAL_STATE:
+            ascii_value = 0
+            edge_idx = -1
+
+            for i in range(len(vertex.outgoing_edges)):
+
+                edge = vertex.outgoing_edges[i]
+                if int(ord(edge.on_symbol[0])) > ascii_value:
+                    ascii_value = ord(edge.on_symbol)
+                    edge_idx = i
+            idx_last += vertex.outgoing_edges[edge_idx].op
+            vertex = vertex.outgoing_edges[edge_idx].dest
+
+        return idx_first, idx_last
