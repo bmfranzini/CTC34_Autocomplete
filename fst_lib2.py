@@ -167,14 +167,14 @@ class FST(object):
                     break
 
             if not aux:
-                return
+                return print("A palavra nao é prefixo de nada no dicionário")
 
         if not node.outgoing_edges:
-            return -1
+            return []
 
-        first, last = self.findIndex(node, idx_word)
-        print("sugestoes para a palavra: ", key, " ---- ", first, last)
-        return dict[first:last+1]
+        sugestions = self.bfs(node,idx_word,dict)
+        print("sugestoes para a palavra: ", key, " ---- ", sugestions )
+        return sugestions
 
     def findIndex(self, node, idx):
         vertex = node
@@ -209,3 +209,19 @@ class FST(object):
             vertex = vertex.outgoing_edges[edge_idx].dest
 
         return idx_first, idx_last
+
+    def bfs(self, node, idx, dict):
+        sugestions = []
+        vertice_fonte = node
+        fila = []
+        filhos = []
+        for edge in vertice_fonte.outgoing_edges:
+            fila.append((edge.dest, edge.op+idx))
+        
+        while fila:
+            vertice = fila.pop(0)
+            if vertice[0].type == FINAL_STATE:
+                sugestions.append(dict[vertice[1]])
+            for edge in vertice[0].outgoing_edges:
+                fila.append((edge.dest, edge.op+vertice[1]))
+        return sugestions
