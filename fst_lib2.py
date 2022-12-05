@@ -90,6 +90,7 @@ class FST(object):
     def __init__(self):
         self.states = []
         self.init_state = None
+        self.node_counter = 0
     
     def add_state(self, state_type = NORMAL_STATE, outgoing_edges = []):
         new_state = State(state_type, outgoing_edges)

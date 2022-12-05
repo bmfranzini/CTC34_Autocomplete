@@ -18,6 +18,7 @@ def find_minimized(state):
     #print("Novo minimo")
     #for edge in new_state.outgoing_edges:
         #print(f'{edge.dest}  {edge.on_symbol}')
+    t.node_counter += 1
     t.states.append(new_state)
     #t.add_state(state.type, state.outgoing_edges)
 

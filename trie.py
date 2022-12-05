@@ -14,7 +14,7 @@ class TrieNode():
 class Trie():
     def __init__(self):
         self.root = TrieNode()
-        self.contador = 0
+        self.node_counter = 0
 
     def formTrie(self, keys):
         for i in range(len(keys)):
@@ -35,6 +35,7 @@ class Trie():
                 filho = TrieNode()
                 filho.char = a
                 filho.parent = node
+                self.node_counter += 1
                 node.children.append(filho)
 
             node = filho
