@@ -14,13 +14,13 @@ class TrieNode():
 class Trie():
     def __init__(self):
         self.root = TrieNode()
-        self.contador = 1
+        self.contador = 0
 
     def formTrie(self, keys):
-        for key in keys:
-            self.insert(key)
+        for i in range(len(keys)):
+            self.insert(keys[i], i)
 
-    def insert(self, key):
+    def insert(self, key, index):
         node = self.root
 
         for a in key:
@@ -39,17 +39,10 @@ class Trie():
 
             node = filho
         node.last = True
-        self.contador = self.contador + 1
-        node.idx = self.contador
+        node.idx = index
 
-    def suggestionsRec(self, node, word, sugestions):
-        if node.last:
-            sugestions.append(word)
 
-        for a, n in node.children:
-            self.suggestionsRec(n, word + a, sugestions)
-
-    def printAutoSuggestions(self, key, sugestions):
+    def findSuggestions(self, key, dict):
         node = self.root
         for a in key:
             aux = False
@@ -60,27 +53,25 @@ class Trie():
                     break
 
             if not aux:
-                return
+                print("A palavra nao é prefixo de nada no dicionário")
+                return []
 
         if not node.children:
-            return -1
+            return []
 
-        self.bfs(node, sugestions)
+        return self.bfs(node, dict)
 
-    def bfs(self, node, sugestions):
+    def bfs(self, node, dict):
         vertice_fonte = node
         fila = []
         fila.extend(vertice_fonte.children)
+        sugestions = []
         while fila:
             vertice = fila.pop(0)
             if vertice.last:
-                p = vertice
-                palavra = ''
-                while p.parent is not None:
-                    palavra = p.char + palavra
-                    p = p.parent
-                sugestions.append(palavra)
+                sugestions.append(dict[vertice.idx])
             fila.extend(vertice.children)
+        return sugestions
 
 
 """
