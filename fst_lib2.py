@@ -58,11 +58,11 @@ class State(object):
         assert isinstance(edge, Edge), 'Outgoing Edge must be an instance of Edge.'
         self.outgoing_edges.append(edge)
     
-    def del_edge(self, state): # revisar para checar tbm transicao
+    def del_edge(self, state): 
         for edge in self.outgoing_edges:
             if edge.dest == state:
                 self.outgoing_edges.remove(edge)
-    def output_to_state(self, state): # revisar para checar tbm transicao
+    def output_to_state(self, state):
         for edge in self.outgoing_edges:
             if edge.dest == state:
                 return edge.op
@@ -121,14 +121,9 @@ class FST(object):
             for edge in node.outgoing_edges:
                 if edge.on_symbol == a:
                     aux = True
-                    if edge.dest.type == FINAL_STATE and i == len(key) - 1:
-                        #final = True
-                        #sugestions.append(key)
-                        pass
                     if edge.dest.type != FINAL_STATE:
                         node = edge.dest
                         idx_word += edge.op
-                    #break
 
             if not aux:
                 print("A palavra nao é prefixo de nada no dicionário")
@@ -137,12 +132,13 @@ class FST(object):
         if not node.outgoing_edges:
             return []
         sugestions = []
-        #if final:
-            #for edge in node.outgoing_edges:
-                #if edge.on_symbol == key[-1]:
-                    #sugestions.extend(self.bfs(edge.dest, idx_word, dict))
-        #else:
-        sugestions.extend(self.bfs(node, idx_word, dict))
+        lst = self.bfs(node, idx_word, dict)
+        if isinstance(lst,str):
+            lst = [lst]
+        for word in lst:
+            if word.startswith(key) and word != key:
+                sugestions.append(word)
+        
 
         return sugestions
 
