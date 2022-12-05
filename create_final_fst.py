@@ -3,24 +3,18 @@ import pickle
 
 # defino as variáveis globais
 t = fst.FST()
-#fst_file_read = open('fullfst.obj', 'rb')
-#t = pickle.load(fst_file_read)
+
 def find_minimized(state):
     # retorna um estado equivalente do dicionário. Se não estiver presente, insere uma cópia
     # do parâmetro no dicionário e o retorna
     global t
     for state_index in range(len(t.states)):
         if t.states[state_index].is_equivalent(state):
-            #print("Achei equivalente")
             return state_index
     new_state = fst.State(fst.NORMAL_STATE)
-    new_state.copy_state(state) # acho que não precisa, já está sendo uma cópia
-    #print("Novo minimo")
-    #for edge in new_state.outgoing_edges:
-        #print(f'{edge.dest}  {edge.on_symbol}')
+    new_state.copy_state(state)
     t.node_counter += 1
     t.states.append(new_state)
-    #t.add_state(state.type, state.outgoing_edges)
 
     return len(t.states) - 1
 
@@ -46,13 +40,11 @@ def create_FST(input_list, output_list):
         while(j < len(current_word) and j < len(previous_word) - 1 and current_word[j] == previous_word[j]):
             j += 1
         prefix_len = j  # número máximo de letras do prefixo comum
-        #print(prefix_len)
         # minimizamos os estados do sufixo da última palavra
         for j in range(len(previous_word), prefix_len, -1):
             output = temp_states[j-1].output_to_state(temp_states[j])
             temp_states[j-1].del_edge(temp_states[j])
             temp_states[j-1].create_edge(t.states[find_minimized(temp_states[j])], previous_word[j-1], output)
-            #new_edge = fst.Edge(temp_states[j-1], t.states[find_minimized(temp_states[j])], previous_word[j-1])
             temp_states[j].clear_state()
         
         for j in range((prefix_len)+1, len(current_word)):
@@ -60,34 +52,23 @@ def create_FST(input_list, output_list):
 
         # inicializamos os estados do vetor para a palavra atual (considero apenas o sufixo, pois o resto já está inicializado)
         for j in range((prefix_len), len(current_word)):
-            #clearstate
-            #temp_states[j].clear_state()
-            #new_edge = fst.Edge(temp_states[j], temp_states[j+1], current_word[j])
             temp_states[j].create_edge(temp_states[j+1], current_word[j], 0)
-            #print("CRIANDO A EDGE QUE VAI DE ", temp_states[j], " para ", temp_states[j+1])
-        # temp_states[len(current_word)].clear_state()
+
         if current_word != previous_word:
             temp_states[len(current_word)].type = fst.FINAL_STATE
-        #j = 0
-        #for state in temp_states[:len(current_word)+1]:
-            #print("***************Estado de número ", i, "*****************")
-            #for edge in state.outgoing_edges:
-                #print("Símbolo: ", edge.on_symbol, "Indo de ", edge.src, " para ", edge.dest)
-            #j += 1
         
         # encontramos o output da bifurcação
         prefix_output = 0
 
         for j in range(prefix_len+1):
             prefix_output += temp_states[j].output(current_word[j])
-            #print("PrefixOutput: ",prefix_output)
         new_output = current_output - prefix_output
+        
         if input_list[i] == "tuessd":
             print("prefix_len: ", prefix_len)
             print("current_output: ", current_output)
             print("prefix_output: ", prefix_output)
 
-        #print('NewOutput', new_output)
         temp_states[prefix_len].set_output(temp_states[prefix_len+1], new_output)
         
         previous_word = current_word
@@ -97,10 +78,8 @@ def create_FST(input_list, output_list):
         output = temp_states[i-1].output_to_state(temp_states[i])
         temp_states[i-1].del_edge(temp_states[i])
         temp_states[i-1].create_edge(t.states[find_minimized(temp_states[i])], current_word[i-1], output)
-        #new_edge = fst.Edge(temp_states[i-1], t.states[find_minimized(temp_states[i])], current_word[i-1])
         temp_states[i].clear_state()
     minimized_state_index3 = find_minimized(temp_states[0])
-    #print(t.states[minimized_state_index3].outgoing_edges)
     t.define_initial(t.states[minimized_state_index3])
     
     return t
