@@ -5,17 +5,14 @@ import pickle
 from create_final_fst import *
 from fst_lib2 import *
 
-#fst_file_read = open('fullfst.obj', 'rb')
-#t = pickle.load(fst_file_read)
+fst_file_read = open('fullfst.obj', 'rb')
+t = pickle.load(fst_file_read)
 
-trie_file_read = open('fulltrie.obj', 'rb')
-t = pickle.load(trie_file_read)
+#trie_file_read = open('fulltrie.obj', 'rb')
+#t = pickle.load(trie_file_read)
 
-dict = []
-with open("/usr/share/dict/american-english", "r") as file:
-    for line in file:
-        for word in line.split():
-            dict.append(word)
+dict_file_read = open('dict.obj', 'rb')
+dict = pickle.load(dict_file_read)
 
 #dict = ["add","added", "addeds", "adder"]
 #output_list = [x for x in range(len(dict))]
