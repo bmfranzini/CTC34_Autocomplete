@@ -43,16 +43,18 @@ class State(object):
         new_edge = Edge(self, state, on_symbol, output)
         self.outgoing_edges.append(new_edge)
 
-    def set_output(self, c, num):
+    def set_output(self, state, num):
         for edge in self.outgoing_edges:
-            if edge.on_symbol == c:
+            if edge.dest == state:
                 edge.op = num
     
     def output(self, c):
+        aux_edge = None
+        max_op = 0
         for edge in self.outgoing_edges:
-            if edge.on_symbol == c:
-                return edge.op
-        return None
+            if edge.on_symbol == c and edge.op >= max_op:
+                aux_edge = edge
+        return aux_edge.op
     """
     def word_set(self):
         state_set = set()
@@ -157,14 +159,20 @@ class FST(object):
     def findSuggestions(self, key, dict):
         node = self.init_state
         idx_word = 0
-        for a in key:
+        sugestions = []
+        for i in range(len(key)):
+            a= key[i]
             aux = False
-            for children in node.outgoing_edges:
-                if children.on_symbol == a:
+            for edge in node.outgoing_edges:
+                if edge.on_symbol == a:
                     aux = True
-                    node = children.dest
-                    idx_word += children.op
-                    break
+                    if edge.dest.type == FINAL_STATE and i == len(key) -1:
+                        #sugestions.append(key)
+                        pass
+                    elif edge.dest.type != FINAL_STATE:
+                        node = edge.dest
+                        idx_word += edge.op
+                        break
 
             if not aux:
                 return print("A palavra nao é prefixo de nada no dicionário")
@@ -172,7 +180,7 @@ class FST(object):
         if not node.outgoing_edges:
             return []
 
-        sugestions = self.bfs(node,idx_word,dict)
+        sugestions.extend(self.bfs(node,idx_word,dict))
         print("sugestoes para a palavra: ", key, " ---- ", sugestions )
         return sugestions
 

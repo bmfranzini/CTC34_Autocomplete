@@ -5,25 +5,29 @@ import pickle
 from create_final_fst import *
 from fst_lib2 import *
 
-trie_file_read = open('fullfst.obj', 'rb')
-t = pickle.load(trie_file_read)
+#trie_file_read = open('fullfst.obj', 'rb')
+#t = pickle.load(trie_file_read)
 
-dict = []
-with open("/usr/share/dict/american-english", "r") as file:
-    for line in file:
-        for word in line.split():
-            dict.append(word)
-# dict = ["mon", "thurs", "tues", "tye"]
-# output_list = [x for x in range(len(dict))]
-# t = create_FST(dict, output_list)
+#dict = []
+#with open("/usr/share/dict/american-english", "r") as file:
+#    for line in file:
+#        for word in line.split():
+#            dict.append(word)
+dict = ["tues", "tuess", "tuessd", "tye", "tyepe"]
+#dict = ["ab", "abcd"]
+output_list = [x for x in range(len(dict))]
+t = create_FST(dict, output_list)
 
-# for state in t.states:
-#     print("------------------inicio do estado------------------")
-#     if state.type == FINAL_STATE:
-#         print("ESTADO FINAL")
-#     for edge in state.outgoing_edges:
-#         print(edge.on_symbol)
-#     print("------------------final do estado--------------------")
+
+
+for state in t.states:
+    print("------------------inicio do estado------------------")
+    if state.type == FINAL_STATE:
+        print("ESTADO FINAL")
+    for edge in state.outgoing_edges:
+        print(edge.on_symbol, edge.op)
+    print("---------------------------------------------------")
+
 #t = Trie()
 #t.formTrie(["b", "hel", "hell", "hello", "help", "a"])
 #print(t.root.children[0].children[0].children[0].children[0].children[0].last)
@@ -51,7 +55,7 @@ def get_word(*args):
     palavra = v.get()
     word = palavra
     sugestions = []
-    sugestions = t.findSuggestions(palavra, dict)
+    sugestions = t.findSuggestions(palavra, dict)#, t.init_state)
     words_lev = sugestions
 
     matches = []

@@ -76,12 +76,18 @@ def create_FST(input_list, output_list):
         
         # encontramos o output da bifurcação
         prefix_output = 0
-        for j in range(prefix_len):
+
+        for j in range(prefix_len+1):
             prefix_output += temp_states[j].output(current_word[j])
             #print("PrefixOutput: ",prefix_output)
         new_output = current_output - prefix_output
+        if input_list[i] == "tuessd":
+            print("prefix_len: ", prefix_len)
+            print("current_output: ", current_output)
+            print("prefix_output: ", prefix_output)
+
         #print('NewOutput', new_output)
-        temp_states[prefix_len].set_output(current_word[prefix_len], new_output)
+        temp_states[prefix_len].set_output(temp_states[prefix_len+1], new_output)
         
         previous_word = current_word
     
